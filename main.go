@@ -19,27 +19,6 @@ func main() {
 	}
 }
 
-type server struct {
-	size int // struct
-	players int // []players - struct
-}
-
-func initServer (size int, players int) server {
-	return struct {
-		size    int
-		players int
-	}{size, players}
-}
-
-func (s *server) start (settings *Settings) {
-
-	ticker := time.Tick(settings.getWorldCycleTimeTypeDuration() * time.Second)
-
-	for range ticker {
-		fmt.Println(settings.name)
-	}
-}
-
 type Settings struct {
 	name string
 	id int64
