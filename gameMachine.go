@@ -1,13 +1,18 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 type server struct {
 	size int // struct
 	players int // []players - struct
 }
 
 type playersMap struct {
-	width: float32
-	height: float32
+	width float32
+	height float32
 }
 
 func initServer (size int, players int) server {
