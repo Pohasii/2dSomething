@@ -2,43 +2,22 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
+
+var messageFrom chan messageFromTCPUser = make(chan messageFromTCPUser, 100)
 
 func main() {
 
 	Settings := initSettings("test", "localhost", "8081", 0, 3)
-	Server := initServer(1, 1)
+	Server := initServer(50, 50)
 	Users := initUsers()
 	NWs := initNetworkSocket(Settings.ip, Settings.port)
 
-	fmt.Printf("Hello time machine server %v :)\n", Settings.name)
+	fmt.Printf("Hello time machine gameServer %v :)\n", Settings.name)
 
 	go Server.start(&Settings)
 
 	NWs.handleConnection(&Users)
-}
-
-type Settings struct {
-	name           string
-	id             int64
-	ip             string
-	port           string
-	worldCycleTime int64
-}
-
-func initSettings(name, ip, port string, id, worldCycleTime int64) Settings {
-	return Settings{
-		name,
-		id,
-		ip,
-		port,
-		worldCycleTime,
-	}
-}
-
-func (s Settings) getWorldCycleTimeTypeDuration() time.Duration {
-	return time.Duration(s.worldCycleTime)
 }
 
 //1) игровой цикл

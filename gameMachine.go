@@ -5,24 +5,22 @@ import (
 	"time"
 )
 
-type server struct {
-	size int // struct
-	players int // []players - struct
+type gameServer struct {
+	size    worldMapSize // struct
+	players              // []players - struct
 }
 
-type playersMap struct {
-	width float32
-	height float32
+func initServer(x, y float32) gameServer {
+	return gameServer{
+		worldMapSize{
+			width:  x,
+			height: y,
+		},
+		make(players, 0, 6),
+	}
 }
 
-func initServer (size int, players int) server {
-	return struct {
-		size    int
-		players int
-	}{size, players}
-}
-
-func (s *server) start (settings *Settings) {
+func (s *gameServer) start(settings *Settings) {
 
 	ticker := time.Tick(settings.getWorldCycleTimeTypeDuration() * time.Second)
 
@@ -31,3 +29,7 @@ func (s *server) start (settings *Settings) {
 	}
 }
 
+type worldMapSize struct {
+	width  float32
+	height float32
+}

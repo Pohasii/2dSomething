@@ -63,3 +63,13 @@ func (n *networkSocket) getTCPAddr() *net.TCPAddr {
 
 	return tcpAddr
 }
+
+// =======================
+// message
+// =======================
+
+type messageFromTCPUser struct {
+	ip   string
+	data []byte
+	id   int
+}
