@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 type users struct {
@@ -23,21 +24,41 @@ func initUsers() users {
 
 func (u *users) addUser(ip string, tcp *net.TCPConn) {
 	u.Lock()
-	newUser := user{
-		IP:ip,
-		id: u.i,
-		status: true,
-		Conn: tcp,
-	}
-
+	defer u.Unlock()
 	u.i++
 
+	newUser := user{
+		IP:     ip,
+		id:     u.i,
+		status: true,
+		Conn:   tcp,
+	}
+
 	u.u = append(u.u, newUser)
-	u.Unlock()
+
+	go u.getUserById(newUser.id).reader()
+
 }
 
+func (u *users) getUserById(id int) *user {
+	u.Lock()
+	defer u.Unlock()
+
+	for _, us := range u.u {
+		if us.id != id {
+			continue
+		}
+		return &us
+	}
+	return nil
+}
+
+// ============
+// user
+// ============
+
 type user struct {
-	IP    string
+	IP     string
 	id     int
 	status bool
 	Conn   *net.TCPConn
@@ -57,7 +78,7 @@ func (u *user) reader() {
 
 		bufferBytes, err := bufio.NewReader(u.Conn).ReadBytes('\n')
 		if err != nil {
-			log.Printf("error the the gameServer try to read from user: %v - %v", u ,err)
+			log.Printf("error the the gameServer try to read from user: %v - %v", u, err)
 			one := make([]byte, 1)
 			if _, err := u.Conn.Read(one); err == io.EOF {
 				log.Printf("loss of connection of %v: %v", u, err)
@@ -69,12 +90,13 @@ func (u *user) reader() {
 				ip:   u.Conn.RemoteAddr().String(),
 				data: bufferBytes,
 				id:   u.id,
+				date: time.Now(),
 			}
 		}
 	}
 }
 
-func (u *user) write (data []byte) {
+func (u *user) write(data []byte) {
 	_, err := u.Conn.Write(data)
 	if err != nil {
 		log.Println(err)

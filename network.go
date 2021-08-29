@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 )
 
 type networkSocket struct {
@@ -72,4 +73,5 @@ type messageFromTCPUser struct {
 	ip   string
 	data []byte
 	id   int
+	date time.Time
 }

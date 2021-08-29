@@ -1,0 +1,8 @@
+namespace messages;
+
+table RootMessage {
+    m_type: int;
+    contents: [ubyte];
+}
+
+root_type RootMessage;
