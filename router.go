@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	flatbuffers "github.com/google/flatbuffers/go"
 	mesSchem "github.com/pohasii/2dsomething"
 	// messages "mod"
@@ -29,6 +30,7 @@ func (r *Router) start() {
 		if t == 1 {
 			if us := r.users.getUserById(m.id); us != nil {
 				us.write(makeRootMessage(r.fb, 1, []byte("1")))
+				fmt.Println("ping from: ", m.ip)
 			}
 		}
 	}

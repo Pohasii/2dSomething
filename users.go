@@ -36,7 +36,11 @@ func (u *users) addUser(ip string, tcp *net.TCPConn) {
 
 	u.u = append(u.u, newUser)
 
-	go u.getUserById(newUser.id).reader()
+	for i, us := range u.u {
+		if us.id == newUser.id {
+			go u.u[i].reader()
+		}
+	}
 
 }
 
@@ -44,11 +48,11 @@ func (u *users) getUserById(id int) *user {
 	u.Lock()
 	defer u.Unlock()
 
-	for _, us := range u.u {
+	for i, us := range u.u {
 		if us.id != id {
 			continue
 		}
-		return &us
+		return &u.u[i]
 	}
 	return nil
 }
@@ -73,9 +77,7 @@ func (u *user) reader() {
 	}(u.Conn)
 
 	// _ = u.Conn.SetReadDeadline(time.Now().Add(time.Minute))
-
 	for {
-
 		bufferBytes, err := bufio.NewReader(u.Conn).ReadBytes('\n')
 		if err != nil {
 			log.Printf("error the the gameServer try to read from user: %v - %v", u, err)
