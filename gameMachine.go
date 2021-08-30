@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -24,7 +25,9 @@ func (s *gameServer) start(settings *Settings) {
 	ticker := time.Tick(settings.getWorldCycleTimeTypeDuration() * time.Second)
 
 	for range ticker {
-		// fmt.Println(settings.name)
+		for _, p := range s.players {
+			fmt.Println(*p)
+		}
 	}
 }
 

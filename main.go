@@ -18,7 +18,7 @@ func main() {
 	// network
 	Users := initUsers()
 	NWs := initNetworkSocket(Settings.ip, Settings.port)
-	networkMessageRouter := initRouter(&Users, &Server.players, flatbuffers.NewBuilder(0), &messageFrom)
+	networkMessageRouter := initRouter(&Users, &Server.players, flatbuffers.NewBuilder(0), messageFrom)
 
 	// server hello message
 	fmt.Printf("Hello time machine gameServer %v :)\n", Settings.name)

@@ -1,8 +1,8 @@
 package main
 
-type players []player
+type players []*player
 
-func (p players) findPlayerById(id int) player {
+func (p players) findPlayerById(id int) *player {
 	for _, Player := range p {
 		if Player.getId() != id {
 			continue
@@ -10,7 +10,7 @@ func (p players) findPlayerById(id int) player {
 		return Player
 	}
 
-	return player{
+	return &player{
 		id:       -1,
 		position: pos{},
 	}
@@ -22,7 +22,17 @@ func (p *players) addPlayer(id int, x float32, y float32, speed float32) {
 		position: pos{x: x, y: y},
 		speed:    speed,
 	}
-	*p = append(*p, Player)
+	*p = append(*p, &Player)
+}
+
+func (p *players) CheckThePlayerById(id int) bool {
+	for _, player := range *p{
+		if player.id == id {
+			return true
+		}
+	}
+
+	return false
 }
 
 //remove

@@ -40,6 +40,46 @@ func main() {
 			}
 			fmt.Println("message to Server: ", messToServer)
 
+			if messToServer == "up" {
+				mes := makeRootMessage(b, 3, []byte(messToServer))
+				count, err := conn.Write(mes)
+				if err != nil {
+					log.Println("send to server fail: ", err)
+				}
+				fmt.Println("message to Server: ", mes, "count :", count)
+				continue
+			}
+
+			if messToServer == "down" {
+				mes := makeRootMessage(b, 4, []byte(messToServer))
+				count, err := conn.Write(mes)
+				if err != nil {
+					log.Println("send to server fail: ", err)
+				}
+				fmt.Println("message to Server: ", mes, "count :", count)
+				continue
+			}
+
+			if messToServer == "left" {
+				mes := makeRootMessage(b, 5, []byte(messToServer))
+				count, err := conn.Write(mes)
+				if err != nil {
+					log.Println("send to server fail: ", err)
+				}
+				fmt.Println("message to Server: ", mes, "count :", count)
+				continue
+			}
+
+			if messToServer == "right" {
+				mes := makeRootMessage(b, 6, []byte(messToServer))
+				count, err := conn.Write(mes)
+				if err != nil {
+					log.Println("send to server fail: ", err)
+				}
+				fmt.Println("message to Server: ", mes, "count :", count)
+				continue
+			}
+
 			mes := makeRootMessage(b, 2, []byte(messToServer))
 			count, err := conn.Write(mes)
 			if err != nil {
