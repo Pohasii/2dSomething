@@ -69,8 +69,14 @@ func (n *networkSocket) getTCPAddr() *net.TCPAddr {
 // message
 // =======================
 
-type messageFromTCPUser struct {
+type messageFromTCPUser struct { // messageFromTCPUser
 	ip   string
+	data []byte
+	id   int
+	date time.Time
+}
+
+type messageToTCPUser struct { // messageFromTCPUser
 	data []byte
 	id   int
 	date time.Time

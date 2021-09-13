@@ -5,4 +5,15 @@ table RootMessage {
     contents: [ubyte];
 }
 
+table MoveMessage {
+    id: uint;
+    x: float;
+    y: float;
+}
+
+table GameMachineMessage {
+    m_type: int;
+    contents: [ubyte];
+}
+
 root_type RootMessage;

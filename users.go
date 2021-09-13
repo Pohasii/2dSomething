@@ -13,12 +13,14 @@ type users struct {
 	sync.Mutex
 	i int
 	u []user
+	mes chan messageFromTCPUser
 }
 
-func initUsers() users {
+func initUsers(mes chan messageFromTCPUser) users {
 	return users{
-		i: 0,
-		u: make([]user, 0, 5),
+		i:   0,
+		u:   make([]user, 0, 5),
+		mes: mes,
 	}
 }
 
@@ -38,7 +40,7 @@ func (u *users) addUser(ip string, tcp *net.TCPConn) {
 
 	for i, us := range u.u {
 		if us.id == newUser.id {
-			go u.u[i].reader()
+			go u.u[i].reader(u.mes)
 		}
 	}
 
@@ -68,7 +70,7 @@ type user struct {
 	Conn   *net.TCPConn
 }
 
-func (u *user) reader() {
+func (u *user) reader(_chan chan messageFromTCPUser) {
 	defer func(Conn *net.TCPConn) {
 		err := Conn.Close()
 		if err != nil {
@@ -88,7 +90,7 @@ func (u *user) reader() {
 			}
 			break
 		} else {
-			messageFrom <- messageFromTCPUser{
+			_chan <- messageFromTCPUser{
 				ip:   u.Conn.RemoteAddr().String(),
 				data: bufferBytes,
 				id:   u.id,
@@ -99,6 +101,7 @@ func (u *user) reader() {
 }
 
 func (u *user) write(data []byte) {
+	data = append(data, []byte("\n")...)
 	_, err := u.Conn.Write(data)
 	if err != nil {
 		log.Println(err)

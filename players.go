@@ -2,7 +2,9 @@ package main
 
 type players []*player
 
-func (p players) findPlayerById(id int) *player {
+type ID uint
+
+func (p players) findPlayerById(id ID) *player {
 	for _, Player := range p {
 		if Player.getId() != id {
 			continue
@@ -10,13 +12,10 @@ func (p players) findPlayerById(id int) *player {
 		return Player
 	}
 
-	return &player{
-		id:       -1,
-		position: pos{},
-	}
+	return nil
 }
 
-func (p *players) addPlayer(id int, x float32, y float32, speed float32) {
+func (p *players) addPlayer(id ID, x float32, y float32, speed float32) {
 	Player := player{
 		id:       id,
 		position: pos{x: x, y: y},
@@ -25,7 +24,7 @@ func (p *players) addPlayer(id int, x float32, y float32, speed float32) {
 	*p = append(*p, &Player)
 }
 
-func (p *players) CheckThePlayerById(id int) bool {
+func (p *players) CheckThePlayerById(id ID) bool {
 	for _, player := range *p{
 		if player.id == id {
 			return true
@@ -36,9 +35,9 @@ func (p *players) CheckThePlayerById(id int) bool {
 }
 
 //remove
-func (p *players) removePlayer(id int) {
+func (p *players) removePlayer(id ID) {
 	Player := p.findPlayerById(id)
-	if Player.getId() != -1 {
+	if Player != nil {
 		// p = remove(p, Player)
 	}
 }
@@ -51,7 +50,7 @@ type pos struct {
 }
 
 type player struct {
-	id       int
+	id       ID
 	position pos
 	speed    float32
 }
@@ -66,6 +65,6 @@ func (p *player) updatePos(x, y float32) {
 	p.position.y = y
 }
 
-func (p player) getId() int {
+func (p player) getId() ID {
 	return p.id
 }

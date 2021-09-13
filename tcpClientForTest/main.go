@@ -19,7 +19,7 @@ func main() {
 
 	b := flatbuffers.NewBuilder(0)
 
-	addr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:8081")
+	addr, err := net.ResolveTCPAddr("tcp", "192.168.0.129:8081")
 	if err != nil {
 		log.Println("setAddr: ", err)
 	}
@@ -142,23 +142,6 @@ func readMess(Conn *net.Conn, c chan []byte) {
 		} else {
 			c <- bufferBytes
 		}
-
-		//count, err := (*Conn).Read(mess)
-		//if err != nil {
-		//	log.Println("Read: ", err)
-		//	if err == io.EOF {
-		//		err := (*Conn).Close()
-		//		if err != nil {
-		//			log.Fatal(err)
-		//			return
-		//		}
-		//		break
-		//	}
-		//}
-		//
-		//fmt.Println(mess)
-		//mess = mess[:count]
-		//c <- mess
 	}
 }
 
